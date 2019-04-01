@@ -82,7 +82,7 @@ for epoch in range(num_epochs):
             D_loss_real = loss_fn(real_pred, true_labels)
 
             noises.data.copy_(torch.randn(batch_size, 100, 1, 1))
-            fake_image = G(noises).detach()
+            fake_image = G(noises).detach() # fake_image.requires_grad => False
             fake_pred = D(fake_image)
             D_loss_fake = loss_fn(fake_pred, fake_labels)
 
