@@ -57,6 +57,9 @@ if os.path.exists(os.path.join(checkpoints_dir, 'D.pkl')):
     print('loading D...')
     D = torch.load(os.path.join(checkpoints_dir, 'D.pkl'))
 
+G.train()
+D.train()
+
 
 #####################################################################
 # Loss & Optimizer
