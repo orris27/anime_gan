@@ -12,7 +12,7 @@ import os
 checkpoints_dir = 'checkpoints/'
 batch_size = 256
 
-# load
+# load models
 if os.path.exists(os.path.join(checkpoints_dir, 'G.pkl')):
     print('loading G...')
     G = torch.load(os.path.join(checkpoints_dir, 'G.pkl'))
@@ -23,11 +23,14 @@ if os.path.exists(os.path.join(checkpoints_dir, 'D.pkl')):
 G.eval()
 D.eval()
 
+# create noises
 noises = torch.reshape(Variable(torch.from_numpy((np.vstack(torch.randn(100) for _ in range(batch_size))))), [batch_size, 100, 1, 1])
 noises = noises.cuda()
 
+# generate images
 fake_image = G(noises)
 
+# select images with highest scores
 scores = D(fake_image).detach()
 scores = scores.data.squeeze()
 indexs = scores.topk(64)[1]
@@ -35,4 +38,5 @@ result = list()
 for index in indexs:
     result.append(fake_image.data[index])
 
+# save images
 torchvision.utils.save_image(torch.stack(result), 'result.png', normalize=True, range=(-1, 1))
