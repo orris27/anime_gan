@@ -81,7 +81,7 @@ for epoch in range(num_epochs):
             real_pred = D(real_image)
             D_loss_real = loss_fn(real_pred, true_labels)
 
-            noises.data.copy_(torch.randn(batch_size, 100, 1, 1))
+            noises.data.normal_()
             fake_image = G(noises).detach() # fake_image.requires_grad => False
             fake_pred = D(fake_image)
             D_loss_fake = loss_fn(fake_pred, fake_labels)
@@ -96,7 +96,7 @@ for epoch in range(num_epochs):
         if index % 5 == 0: 
             G_optimizer.zero_grad()
             
-            noises.data.copy_(torch.randn(batch_size, 100, 1, 1))
+            noises.data.normal_()
             fake_image = G(noises)
             fake_pred = D(fake_image)
             G_loss = loss_fn(fake_pred, true_labels)
