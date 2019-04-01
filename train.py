@@ -70,21 +70,21 @@ for epoch in range(num_epochs):
             
             real_pred = D(real_image)
             D_loss_real = loss_fn(real_pred, true_labels)
-            D_loss_real.backward()
+            #D_loss_real.backward()
 
 
             noises.data.copy_(torch.randn(batch_size, 100, 1, 1))
             fake_image = G(noises).detach()
             fake_pred = D(fake_image)
             D_loss_fake = loss_fn(fake_pred, fake_labels)
-            D_loss_fake.backward()
+            #D_loss_fake.backward()
 
             #D_loss = - torch.mean(torch.log(real_pred)) - torch.mean(torch.log(1 - fake_pred))
+            D_loss = D_loss_real + D_loss_fake
 
             #D_loss.backward(retain_graph=True)
-            #D_loss.backward()
+            D_loss.backward()
             D_optimizer.step()
-            D_loss = D_loss_real + D_loss_fake
 
         if index % 5 == 0: 
             G_optimizer.zero_grad()
